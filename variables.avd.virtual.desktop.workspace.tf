@@ -1,14 +1,18 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-### Desktop App group ###
-variable "desktop_app_group_type" {
-  description = ""
-  type    = string
-  default = "Desktop"
-}
+##################################
+# AZURE Workspace Configuration ##
+##################################
 
-variable "workspace_description" {
-  description = ""
-  type    = string
+variable "avd_workspace_config" {
+  description = "AVD Workspace specific configuration."
+  type = object({
+    friendly_name                 = optional(string)
+    description                   = optional(string)
+    public_network_access_enabled = optional(bool)
+    extra_tags                    = optional(map(string))
+  })
+  default  = {}
+  nullable = false
 }

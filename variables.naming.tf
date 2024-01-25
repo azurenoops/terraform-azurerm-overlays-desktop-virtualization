@@ -29,8 +29,26 @@ variable "custom_resource_group_name" {
   default     = null
 }
 
-variable "custom_avd_workspace_name" {
-  description = "The name of the custom AVD Workspace to create. If not set, the name will be generated using the `org_name`, `workload_name`, `deploy_environment` and `environment` variables."
+variable "workspace_custom_name" {
+  description = "Custom Azure Virtual Desktop workspace name, generated if not set."
   type        = string
-  default     = null
+  default     = ""
+}
+
+variable "host_pool_custom_name" {
+  description = "Custom Azure Virtual Desktop host pool name, generated if not set."
+  type        = string
+  default     = ""
+}
+
+variable "application_group_custom_name" {
+  description = "Custom Azure Virtual Desktop Application Group name, generated if not set."
+  type        = string
+  default     = ""
+}
+
+variable "scaling_plan_custom_name" {
+  description = "Custom Azure Virtual Desktop Scaling Plan name, generated if not set."
+  type        = string
+  default     = ""
 }

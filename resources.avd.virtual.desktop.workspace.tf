@@ -5,25 +5,16 @@
 # AZURE VIRTUAL DESKTOP Workspace
 ##############################################
 
-resource "azurerm_virtual_desktop_workspace" "ws" {
-  name                = local.workspace_name
-  resource_group_name = local.resource_group_name
-  location            = local.location
-  friendly_name       = var.workload_name
-  description         = var.workspace_description
-  tags                = merge(local.default_tags, var.add_tags)
-}
+resource "azurerm_virtual_desktop_workspace" "workspace" {
+  name     = local.avd_workspace_name
+  location = local.location
 
-resource "azurerm_virtual_desktop_application_group" "avd" {
-  name                = local.avd_app_group_name
   resource_group_name = local.resource_group_name
-  location            = local.location
-  host_pool_id        = azurerm_virtual_desktop_host_pool.pool.id
-  type                = var.desktop_app_group_type
-  friendly_name       = var.workload_name
-}
 
-resource "azurerm_virtual_desktop_workspace_application_group_association" "ws_ass" {
-  workspace_id         = azurerm_virtual_desktop_workspace.ws.id
-  application_group_id = azurerm_virtual_desktop_application_group.avd.id
+  friendly_name = coalesce(var.avd_workspace_config.friendly_name, local.avd_workspace_name)
+  description   = coalesce(var.avd_workspace_config.description, "${title(var.org_name)} Azure Virtual Desktop Workspace.")
+
+  public_network_access_enabled = var.avd_workspace_config.public_network_access_enabled
+
+  tags = merge(local.default_tags, var.avd_workspace_config.extra_tags, var.add_tags)
 }

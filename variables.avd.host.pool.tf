@@ -5,48 +5,44 @@
 # AZURE Host Pool Configuration ##
 ##################################
 
-variable "host_pool_type" {
-  description = "The type of the host pool. Valid values are Personal or Pooled."
-  type    = string
-  default = "Pooled"
-}
+variable "avd_avd_host_pool_config" {
+  description = "AVD Host Pool specific configuration."
+  type = object({
+    friendly_name                         = optional(string)
+    description                           = optional(string)
+    validate_environment                  = optional(bool, true)
+    custom_rdp_properties                 = optional(string, "drivestoredirect:s:*;audiomode:i:0;videoplaybackmode:i:1;redirectclipboard:i:1;redirectprinters:i:1;devicestoredirect:s:*;redirectcomports:i:1;redirectsmartcards:i:1;usbdevicestoredirect:s:*;enablecredsspsupport:i:1;use multimon:i:1;")
+    type                                  = optional(string, "Pooled")
+    load_balancer_type                    = optional(string, "DepthFirst")
+    personal_desktop_assignment_type      = optional(string, "Automatic")
+    maximum_sessions_allowed              = optional(number, 16)
+    preferred_app_group_type              = optional(string)
+    start_vm_on_connect                   = optional(bool, false)
+    host_registration_expires_in_in_hours = optional(number, 48)
+    scheduled_agent_updates = optional(object({
+      enabled                   = optional(bool, false)
+      timezone                  = optional(string, "UTC") # https://jackstromberg.com/2017/01/list-of-time-zones-consumed-by-azure/
+      use_session_host_timezone = optional(bool, false)
+      schedules = optional(list(object({
+        day_of_week = string
+        hour_of_day = number
+      })), [])
+    }), {})
+    extra_tags = optional(map(string))
+  })
+  default  = {}
+  nullable = false
 
-variable "host_pool_load_balancer_type" {
-  description = "The type of the load balancer. Valid values are BreadthFirst or DepthFirst."
-  type    = string
-  default = "BreadthFirst"
-}
-
-variable "host_pool_validate_environment" {
-  description = "Validate the environment before creating the host pool. If set to true, the environment will be validated before creating the host pool. If set to false, the environment will not be validated before creating the host pool. Default is false."
-  type    = bool
-  default = false
-}
-
-variable "start_vm_on_connect" {
-  description = "Start the VM on connect. If set to true, the VM will be started on connect. If set to false, the VM will not be started on connect. Default is false."
-  type    = bool
-  default = false
-}
-
-variable "host_pool_max_sessions_allowed" {
-  description = "The maximum number of sessions allowed on the host pool. Default is 999999."
-  type    = number
-  default = 999999
-}
-
-variable "expiration_date" {
-  description = "The expiration date of the registration info. Default is 1 hour from now."
-  type    = string
-  default = timeadd(format("%sT00:00:00Z", formatdate("YYYY-MM-DD", timestamp())), "3600m")  
-}
-
-variable "scheduled_agent_updates" {
-  description = "The scheduled agent updates configuration for hosted pool."
-  type = map(object({
-    enabled     = bool
-    day_of_week = number
-    hour_of_day = number
-  }))
-  default = null
+  validation {
+    condition     = var.avd_host_pool_config.host_registration_expires_in_in_hours >= 2
+    error_message = "`var.avd_host_pool_config.host_registration_expires_in_in_hours` must be at least two hour from now."
+  }
+  validation {
+    condition     = var.avd_host_pool_config.host_registration_expires_in_in_hours <= 720
+    error_message = "`var.avd_host_pool_config.host_registration_expires_in_in_hours` must be no more than 720 hours (30 days) from now."
+  }
+  validation {
+    condition     = var.avd_host_pool_config.scheduled_agent_updates.enabled ? length(var.avd_host_pool_config.scheduled_agent_updates.schedules) == 1 || length(var.avd_host_pool_config.scheduled_agent_updates.schedules) == 2 : true
+    error_message = "When `var.avd_host_pool_config.scheduled_agent_updates.enabled = true`, at least one and up to 2 maintenance windows can be defined, got ${length(var.avd_host_pool_config.scheduled_agent_updates.schedules)}."
+  }
 }

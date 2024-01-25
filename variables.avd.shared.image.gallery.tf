@@ -1,26 +1,21 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
 
-### Share Image Gallery ###
-variable "sig_image_name" {
-  type        = string
-  description = "Image definition name"
-}
+#####################################
+# AZURE Shared Image Configuration ##
+#####################################
 
-variable "os_type" {
-    type = string
-    description = "Type of OS"
-}
-
-variable "publisher" {
-    type = string
-    description = "Name of the OS publisher"
-}
-
-variable "offer" {
-    type = string
-    description = "The Offer Name for the Image"
-}
-
-variable "sku" {
-    type = string
-    description = "The Name of the SKU for the Image."
+variable "avd_shared_image_gallery" {
+  description = "AVD Shared Image Gallery specific configuration."
+  type = object({
+    sig_image_name = optional(string)
+    os_type        = optional(string)
+    identifier = optional(object({
+      publisher = optional(string)
+      offer     = optional(string)
+      sku       = optional(string)
+    }))
+  })
+  default  = {}
+  nullable = false
 }
