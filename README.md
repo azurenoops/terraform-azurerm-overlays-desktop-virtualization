@@ -163,10 +163,6 @@ The Azure Virtual Desktop Virtual Machine is a virtual machine that is used to h
 
 > NOTE: This module uses the Azure NoOps Virtual Machine Overlay module to create the virtual machines. For more information on how to use the parameters in this module, please see the [Azure NoOps Virtual Machine Overlay module](https://registry.terraform.io/modules/azurenoops/overlays-virtual-machine/azurerm/latest). Some parameters are not used in this module.
 
-```terraform
-
-```terraform
-
 #### Windows Virtual Machine
 
 The Windows Virtual Machine is a virtual machine that is used to host the users' desktops and applications. The virtual machine is used to manage the users that can access the virtual machine.
