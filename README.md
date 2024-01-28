@@ -1,8 +1,8 @@
-# Azure Synapse Overlay Terraform Module
+# Azure Virtual Desktop Overlay Terraform Module
 
-[![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](CHANGELOG.md) [![Notice](https://img.shields.io/badge/notice-copyright-yellow.svg)](NOTICE) [![MIT License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/azurenoops/overlays-template/azurerm/)
+[![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](CHANGELOG.md) [![Notice](https://img.shields.io/badge/notice-copyright-yellow.svg)](NOTICE) [![MIT License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/azurenoops/overlays-desktop-virtualization/azurerm/)
 
-This Overlay terraform module can create a an [Azure Synapse workspace](https://docs.microsoft.com/en-us/azure/synapse/) and manage related components (Key Vault, Storage Accounts, Private Endpoints, etc.) to be used in a [SCCA compliant Network](https://registry.terraform.io/modules/azurenoops/overlays-management-hub/azurerm/latest).
+This Overlay terraform module can create a an [Azure Virtual Desktop](https://docs.microsoft.com/en-us/azure/avd/) and manage related components (Host Pools, App Scaling Plans, etc.) to be used in a [SCCA compliant Network](https://registry.terraform.io/modules/azurenoops/overlays-management-hub/azurerm/latest).
 
 ## SCCA Compliance
 
@@ -28,9 +28,9 @@ provider "azurerm" {
   environment = "usgovernment"
 }
 
-module "overlays-synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "2.0.0"
+module "mod_avd" {
+  source  = "azurenoops/overlays-desktop-virtualization/azurerm"
+  version = "x.x.x"
   
   location = "usgovvirginia"
   environment = "usgovernment"
@@ -41,18 +41,29 @@ module "overlays-synapse" {
 
 ## Resources Used
 
-* [Azure Synapse Workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace)
-* [Azure Synapse SQL Pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_sql_pool)
-* [Azure Synapse Spark Pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_spark_pool)
-* [Azure Synapse Linked Service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_linked_service)
-* [Azure Synapse Workspace Extended Auditing Policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_extended_auditing_policy)
-* [Azure Synapse Workspace Vulnerability Assessment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_vulnerability_assessment)
-* [Azure Synapse Workspace Firewall Rule](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_firewall_rule)
-* [Private Endpoints](https://www.terraform.io/docs/providers/azurerm/r/private_endpoint.html)
-* [Private DNS zone for `privatelink` A records](https://www.terraform.io/docs/providers/azurerm/r/private_dns_zone.html)
+* [Azure Virtual Desktop Workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/azure_virtual_desktop_workspace)
+* [Azure Virtual Desktop Host Pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/azure_virtual_desktop_host_pool)
+* [Azure Virtual Desktop Application Group](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/azure_virtual_desktop_application_group)
+* [Azure Virtual Desktop Application](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/azure_virtual_desktop_application)
+* [Linux Virtual Machine](https://www.terraform.io/docs/providers/azurerm/r/linux_virtual_machine.html)
+* [Windows Virtual Machine](https://www.terraform.io/docs/providers/azurerm/r/windows_virtual_machine.html)
+* [Boot Diagnostics](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine#boot_diagnostics)
+* [Proximity Placement Group](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/proximity_placement_group)
+* [Availability Set](https://www.terraform.io/docs/providers/azurerm/r/availability_set.html)
+* [Public IP](https://www.terraform.io/docs/providers/azurerm/r/public_ip.html)
+* [Network Security Group](https://www.terraform.io/docs/providers/azurerm/r/network_security_group.html)
+* [Managed Identities](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine#identity)
+* [Custom Data](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine#custom_data)
+* [Additional_Unattend_Content](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine#additional_unattend_content)
+* [SSH2 Key generation for Dev Environments](https://www.terraform.io/docs/providers/tls/r/private_key.html)
+* [Azure Monitoring Diagnostics](https://www.terraform.io/docs/providers/azurerm/r/monitor_diagnostic_setting.html)
 * [Azure Resource Locks](https://www.terraform.io/docs/providers/azurerm/r/management_lock.html)
 
 ## Overlay Module Usage
+
+### AVD Workspace
+
+The Azure Virtual Desktop Workspace is a logical grouping of application groups in Azure Virtual Desktop. Each Azure Virtual Desktop application group must be associated with a workspace for users to see the desktops and applications published to them.
 
 ```terraform
 # Azurerm Provider configuration
@@ -60,261 +71,369 @@ provider "azurerm" {
   features {}
 }
 
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
+module "mod_avd" {
+  source  = "azurenoops/overlays-desktop-virtualization/azurerm"
   version = "x.x.x"
+
+# .... omitted
   
-  # By default, this module will create a resource group and 
-  # provide a name for an existing resource group. If you wish 
-  # to use an existing resource group, change the option 
-  # to "create_synapse_resource_group = false." The location of the group 
-  # will remain the same if you use the current resource.
-  existing_resource_group_name = azurerm_resource_group.synapse_rg.name
-  location                     = module.mod_azure_region_lookup.location_cli
-  environment                  = var.environment
-  deploy_environment           = var.deploy_environment
-  org_name                     = var.org_name
-  workload_name                = var.workload_name
+   # AVD Workspace details
+  avd_workspace_config = {
+    public_network_access_enabled = false
+    add_tags = {
+      foo = "bar"
+    }
+  }
 
-  # The following variables are used to create a Datalake storage account
-  storage_data_lake_gen2_id = azurerm_storage_account.adls.id
-
-  # The following variables are used to create a SQL pool
-  sql_administrator_login    = "Example"
-  sql_administrator_password = var.sql_administrator_password
-
-  # The following variables are used to create a workspace
-  saas_connection                = false
-  enable_managed_virtual_network = true
-
-  # The following variables are used to create AAD Linked Tenants
-  linking_allowed_for_aad_tenant_ids = []
+# .... omitted 
 
 }
+```
+
+### AVD Host Pool
+
+The Azure Virtual Desktop Host Pool is a collection of Azure virtual machines that register to Azure Virtual Desktop as session hosts when you run the Azure Virtual Desktop agent. All session host virtual machines in a host pool should be sourced from the same image for a consistent user experience. You control the resources published to users through application groups.
+
+```terraform
+# Azurerm Provider configuration
+provider "azurerm" {
+  features {}
+}
+
+module "mod_avd" {
+  source  = "azurenoops/overlays-desktop-virtualization/azurerm"
+  version = "x.x.x"
+
+# .... omitted
+  
+   # AVD Host Pool details
+  avd_host_pool_config = {
+    # Value will automatically change depending on the Scaling Plan settings
+    load_balancer_type = "BreadthFirst"
+
+    scheduled_agent_updates = {
+      enabled = true
+      schedules = [
+        {
+          day_of_week = "Sunday"
+          hour_of_day = 8
+        },
+        {
+          day_of_week = "Wednesday"
+          hour_of_day = 22
+        },
+      ]
+    }
+  }
+
+# .... omitted 
+
+}
+```
+
+### AVD Application Group
+
+The Azure Virtual Desktop Application Group is a logical grouping of applications installed on session hosts in the host pool.
+
+```terraform
+# Azurerm Provider configuration
+provider "azurerm" {
+  features {}
+}
+
+module "mod_avd" {
+  source  = "azurenoops/overlays-desktop-virtualization/azurerm"
+  version = "x.x.x"
+
+# .... omitted
+  
+   # AVD Application Group details
+  avd_application_group_config = {
+    type = "Desktop"
+  }
+
+# .... omitted
+
+}
+```
+
+### AVD Virtual Machine
+
+The Azure Virtual Desktop Virtual Machine is a virtual machine that is used to host the users' desktops and applications. The virtual machine is used to manage the users that can access the virtual machine.
+
+> NOTE: This module uses the Azure NoOps Virtual Machine Overlay module to create the virtual machines. For more information on how to use the parameters in this module, please see the [Azure NoOps Virtual Machine Overlay module](https://registry.terraform.io/modules/azurenoops/overlays-virtual-machine/azurerm/latest). Some parameters are not used in this module.
+
+```terraform
+
+```terraform
+
+#### Windows Virtual Machine
+
+The Windows Virtual Machine is a virtual machine that is used to host the users' desktops and applications. The virtual machine is used to manage the users that can access the virtual machine.
+
+```terraform
+# Azurerm Provider configuration
+provider "azurerm" {
+  features {}
+}
+
+# .... omitted
+
+module "mod_avd" {
+  source  = "azurenoops/overlays-desktop-virtualization/azurerm"
+  version = "x.x.x"
+  
+  # .... omitted
+
+  avd_vm_config = {
+    windows2019 = {
+      os_type                                      = "windows"
+      distribution_name                            = "windows2019dc"
+      virtual_machine_size                         = "Standard_D13_v2"
+      disable_password_authentication              = true
+      aad_group_desktop                            = "SG-AVD-PersonalDesktop-Users"
+      admin_username                               = "azureuser"
+      admin_password                               = "P@ssw0rd1234"
+      instances_count                              = 20
+      private_ip_address_allocation_type           = "Dynamic"
+      existing_virtual_network_resource_group_name = azurerm_resource_group.avd-network-rg.name
+      existing_virtual_network_name                = azurerm_virtual_network.avd-vnet.name
+      existing_subnet_name                         = azurerm_subnet.avd-snet.name
+      existing_network_security_group_name         = azurerm_network_security_group.avd-nsg.name
+      nsg_inbound_rules = [
+        {
+          name                       = "RDP"
+          priority                   = 100
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "3389"
+          source_address_prefix      = "*"
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "HTTP"
+          priority                   = 101
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "80"
+          source_address_prefix      = "*"
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "HTTPS"
+          priority                   = 102
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "443"
+          source_address_prefix      = "*"
+          destination_address_prefix = "*"
+        },
+      ]
+      data_disks = [
+        {
+          name                 = "disk1"
+          disk_size_gb         = 100
+          storage_account_type = "StandardSSD_LRS"
+        }
+      ]
+      add_tags = {
+        foo = "windows2019"
+      }
+
+    }
+  }
+
+# .... omitted
+
+}
+```
+
+#### Linux Virtual Machine
+
+The Linux Virtual Machine is a virtual machine that is used to host the users' desktops and applications. The virtual machine is used to manage the users that can access the virtual machine.
+
+```terraform
+# Azurerm Provider configuration
+provider "azurerm" {
+  features {}
+}
+
+# .... omitted
+
+module "mod_avd" {
+  source  = "azurenoops/overlays-desktop-virtualization/azurerm"
+  version = "x.x.x"
+  
+  # .... omitted
+
+  avd_vm_config = {
+    ubuntu2004 = {
+      os_type                                      = "linux"
+      distribution_name                            = "ubuntu2004"
+      virtual_machine_size                         = "Standard_D13_v2"
+      disable_password_authentication              = true
+      aad_group_desktop                            = "SG-AVD-PersonalDesktop-Users"
+      admin_username                               = "azureuser"
+      admin_password                               = "P@ssw0rd1234"
+      instances_count                              = 20
+      private_ip_address_allocation_type           = "Dynamic"
+      existing_virtual_network_resource_group_name = azurerm_resource_group.avd-network-rg.name
+      existing_virtual_network_name                = azurerm_virtual_network.avd-vnet.name
+      existing_subnet_name                         = azurerm_subnet.avd-snet.name
+      existing_network_security_group_name         = azurerm_network_security_group.avd-nsg.name
+      nsg_inbound_rules = [
+        {
+          name                       = "SSH"
+          priority                   = 100
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "22"
+          source_address_prefix      = "*"
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "HTTP"
+          priority                   = 101
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "80"
+          source_address_prefix      = "*"
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "HTTPS"
+          priority                   = 102
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "443"
+          source_address_prefix      = "*"
+          destination_address_prefix = "*"
+        },
+      ]
+      data_disks = [
+        {
+          name                 = "disk1"
+          disk_size_gb         = 100
+          storage_account_type = "StandardSSD_LRS"
+        }
+      ]
+      add_tags
+      add_tags = {
+        foo = "ubuntu2004"
+      }
+
+    }
+  }
+
+# .... omitted
+
+}
+```
+
+### AVD Application
+
+The Azure Virtual Desktop Application is a remote application that is used to host the users' applications.
+
+```terraform
+# Azurerm Provider configuration
+provider "azurerm" {
+  features {}
+}
+
+# .... omitted
+
+module "mod_avd" {
+  source  = "azurenoops/overlays-desktop-virtualization/azurerm"
+  version = "x.x.x"
+  
+  # .... omitted
+
+  avd_application_config = {
+    notepad = {
+      application_group_name = "AG-Notepad"
+      friendly_name          = "Notepad"
+      description            = "Notepad"
+      command_line_argument  = "notepad.exe"
+      path                   = "C:\\Windows\\System32\\notepad.exe"
+      icon_path              = "C:\\Windows\\System32\\notepad.exe"
+      icon_index             = 0
+      show_in_portal         = true
+      add_tags = {
+        foo = "notepad"
+      }
+    }
+  }
+
+# .... omitted
+
+}
+```
+
+### AVD Workspace Role Assignment
+
+The Azure Virtual Desktop Workspace Role Assignment is a role assignment that is used to assign users to the Azure Virtual Desktop Workspace.
+
+```terraform
+# Azurerm Provider configuration
+provider "azurerm" {
+  features {}
+}
+
+# .... omitted
+
+module "mod_avd" {
+  source  = "azurenoops/overlays-desktop-virtualization/azurerm"
+  version = "x.x.x"
+  
+  # .... omitted
+
+  avd_workspace_role_assignment_config = {
+    desktop_users = {
+      role_definition_name = "Virtual Machine User Login"
+      principal_id         = data.azurerm_user_assigned_identity.avd-identity.principal_id
+    }
+  }
+
+# .... omitted
+  
+  }
+```
+
+### AVD Shared Image (Comming Soon)
+
+The Azure Virtual Desktop Shared Image is a shared image that is used to create the Azure Virtual Desktop Virtual Machines.
+
+```terraform
+# Azurerm Provider configuration
+provider "azurerm" {
+  features {}
+}
+
+# .... omitted
 
 ```
 
 ## Optional Features
 
-Synapse Overlay has optional features that can be enabled by setting parameters on the deployment.
+Azure Virtual Desktop Overlay has optional features that can be enabled by setting parameters on the deployment.
 
 ## Create resource group
 
-By default, this module will create a resource group and the name of the resource group to be given in an argument `existing_resource_group_name`. If you want to use an existing resource group, specify the existing resource group name, and set the argument to `create_synapse_resource_group = false`.
+By default, this module will create a resource group and the name of the resource group to be given in an argument `existing_resource_group_name`. If you want to use an existing resource group, specify the existing resource group name, and set the argument to `create_avd_resource_group = false`.
 
 > *If you are using an existing resource group, then this module uses the same resource group location to create all resources in this module.*
-
-## Audit Policy
-
-This module can be used with the [Synapse Workspace Extended Auditing Policy Module](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_extended_auditing_policy) to enable audit policy for the Synapse workspace.
-
-```terraform
-# Azurerm Provider configuration
-provider "azurerm" {
-  features {}
-}
-
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "x.x.x"
-
-  # Audit settings 
-  auditing_policy_storage_account_id = azurerm_storage_account.logs.id
-  audit_retention_in_days            = 30
-
-  # SQL Defender settings 
-  sql_defender = {
-    retention_days = 30   
-    audit_container = {
-      name                 = azurerm_storage_container.sql_defender.name
-      storage_account_name = azurerm_storage_account.logs.name
-      resource_group_name  = azurerm_resource_group.synapse_rg.name
-    }
-  }
-}
-
-```
-
-## SQL Defender
-
-This module can be used with the [Azure Synapse Workspace Vulnerability Assessment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_vulnerability_assessment) to enable SQL Defender Vulnerability Assessment for the Synapse workspace.
-
-```terraform
-# Azurerm Provider configuration
-provider "azurerm" {
-  features {}
-}
-
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "x.x.x"
-
-  # Audit settings 
-  auditing_policy_storage_account_id = azurerm_storage_account.logs.id
-  audit_retention_in_days            = 30
-
-  # SQL Defender settings 
-  sql_defender = {
-    retention_days = 30   
-    recurring_scans = {
-      enabled                           = true
-      email_subscription_admins_enabled = true
-      emails                            = ["example@contoso.com"]
-    }
-  }
-}
-
-```
-
-## Built In SQL Pools
-
-This module can be used with the [Synapse Workspace Module](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace) to create built in SQL pools for the Synapse workspace.
-
-```terraform
-# Azurerm Provider configuration
-provider "azurerm" {
-  features {}
-}
-
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "x.x.x"
-
-  # The following variables are used to create a SQL pool
-  sql_administrator_login    = "Example"
-  sql_administrator_password = var.sql_administrator_password
-}
-
-```
-
-## Dedicated SQL Pools
-
-This module can be used with the [Synapse SQL Pool Module](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_sql_pool) to create SQL pools for the Synapse workspace.
-
-```terraform
-# Azurerm Provider configuration
-provider "azurerm" {
-  features {}
-}
-
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "x.x.x"
-
-  sql_pools = {
-    pool1 = {
-      name = "pool1"
-      sku_name = "DW1000c"
-      max_size_gb = 1024
-      tags = {
-        environment = "dev"
-      }
-    }
-  }
-}
-
-```
-
-## Spark Pools
-
-This module can be used with the [Synapse Spark Pool Module](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_spark_pool) to create Spark pools for the Synapse workspace. 
-
-```terraform
-# Azurerm Provider configuration
-provider "azurerm" {
-  features {}
-}
-
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "x.x.x"
-
-  spark_pools = {
-    pool1 = {
-      name = "pool1"
-      node_size = "Small"
-      node_count = 3
-      tags = {
-        environment = "dev"
-      }
-    }
-  }
-}
-
-```
-
-## Private Endpoints
-
-This module can be used with the [Private Endpoint Module](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) to create private endpoints for the Synapse workspace. To use this module with private endpoints, you must set the `enable_private_endpoint` variable to `true`. You must also provide the `existing_virtual_network_name` and `existing_private_subnet_name` variables. This will create a private endpoint connection to the Synapse workspace. You can also provide the `existing_dev_private_dns_zone` and `existing_sql_private_dns_zone` variables to use existing private DNS zones for the Synapse workspace. If you do not provide these variables, the module will create private DNS zones for the Synapse workspace.
-
-```terraform
-# Azurerm Provider configuration
-provider "azurerm" {
-  features {}
-}
-
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "x.x.x"
-
-  # The following variables are used to create a private endpoint connection
-  enable_private_endpoint       = true
-  existing_virtual_network_name = azurerm_virtual_network.synapse_vnet.name
-  existing_private_subnet_name  = azurerm_subnet.synapse_subnet.name
-  existing_dev_private_dns_zone = "privatelink.dev.azuresynapse.net"
-  existing_sql_private_dns_zone = "privatelink.sql.azuresynapse.net"
-}
-
-```
-
-## Data Lake Storage Gen2
-
-This module can be used with the [Data Lake Storage Gen2 Module](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) to create a Data Lake Storage Gen2 account for the Synapse workspace.  To use this module with a Data Lake Storage Gen2 account, you must set the `storage_data_lake_gen2_id` variable to the ID of the Data Lake Storage Gen2 account. This will create a Data Lake Storage Gen2 account for the Synapse workspace.
-
-```terraform
-# Azurerm Provider configuration
-provider "azurerm" {
-  features {}
-}
-
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "x.x.x"
-
-  # The following variables are used to create a Datalake storage account
-  storage_data_lake_gen2_id = azurerm_storage_account.adls.id
-}
-
-```
-
-## Linked Services
-
-This module can be used with the [Synapse Linked Service Module](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_linked_service) to create linked services for the Synapse workspace. 
-
-```terraform
-# Azurerm Provider configuration
-provider "azurerm" {
-  features {}
-}
-
-module "mod_synapse" {
-  source  = "azurenoops/overlays-synapse/azurerm"
-  version = "x.x.x"
-
-  linked_services =[
-    {
-      name = "linked_service1"
-      type = "AzureSqlDW"
-      properties = {
-        typeProperties = {
-          connectionString = "Server=tcp:myserver.database.windows.net,1433;Initial Catalog=mydatabase;Persist Security Info=False;User ID=mylogin;Password=mypassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-        }
-      }
-    }
-  ]
-}
-
-```
 
 ## Resource Locks
 
