@@ -11,7 +11,7 @@ variable "avd_workspace_config" {
     friendly_name                 = optional(string)
     description                   = optional(string)
     public_network_access_enabled = optional(bool)
-    extra_tags                    = optional(map(string))
+    add_tags                      = optional(map(string))
   })
   default  = {}
   nullable = false

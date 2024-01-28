@@ -5,7 +5,7 @@
 # AZURE Host Pool Configuration ##
 ##################################
 
-variable "avd_avd_host_pool_config" {
+variable "avd_host_pool_config" {
   description = "AVD Host Pool specific configuration."
   type = object({
     friendly_name                         = optional(string)
@@ -17,7 +17,6 @@ variable "avd_avd_host_pool_config" {
     personal_desktop_assignment_type      = optional(string, "Automatic")
     maximum_sessions_allowed              = optional(number, 16)
     preferred_app_group_type              = optional(string)
-    start_vm_on_connect                   = optional(bool, false)
     host_registration_expires_in_in_hours = optional(number, 48)
     scheduled_agent_updates = optional(object({
       enabled                   = optional(bool, false)
@@ -28,7 +27,7 @@ variable "avd_avd_host_pool_config" {
         hour_of_day = number
       })), [])
     }), {})
-    extra_tags = optional(map(string))
+    add_tags = optional(map(string))
   })
   default  = {}
   nullable = false
@@ -45,4 +44,10 @@ variable "avd_avd_host_pool_config" {
     condition     = var.avd_host_pool_config.scheduled_agent_updates.enabled ? length(var.avd_host_pool_config.scheduled_agent_updates.schedules) == 1 || length(var.avd_host_pool_config.scheduled_agent_updates.schedules) == 2 : true
     error_message = "When `var.avd_host_pool_config.scheduled_agent_updates.enabled = true`, at least one and up to 2 maintenance windows can be defined, got ${length(var.avd_host_pool_config.scheduled_agent_updates.schedules)}."
   }
+}
+
+variable "aad_group_desktop" {
+  type        = string
+  description = "The desktop pool's assignment AAD group. Required if var.avd_host_pool_config.type != application."
+  default     = null
 }

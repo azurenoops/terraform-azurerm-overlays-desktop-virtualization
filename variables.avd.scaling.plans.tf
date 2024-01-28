@@ -37,7 +37,7 @@ variable "scaling_plan_config" {
       enabled      = optional(bool, true)
       principal_id = optional(string)
     }), {})
-    extra_tags = optional(map(string))
+    add_tags = optional(map(string))
   })
   default  = {}
   nullable = false

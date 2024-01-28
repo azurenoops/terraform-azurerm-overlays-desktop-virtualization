@@ -43,7 +43,7 @@ resource "azurerm_virtual_desktop_scaling_plan" "scaling_plan" {
   time_zone     = var.scaling_plan_config.timezone
 
   host_pool {
-    hostpool_id          = azurerm_virtual_desktop_host_pool.host_pool.id
+    hostpool_id          = azurerm_virtual_desktop_host_pool.pool.id
     scaling_plan_enabled = var.scaling_plan_config.enabled
   }
 
@@ -71,7 +71,7 @@ resource "azurerm_virtual_desktop_scaling_plan" "scaling_plan" {
     }
   }
 
-  tags = merge(local.default_tags, var.scaling_plan_config.extra_tags, var.add_tags)
+  tags = merge(local.default_tags, var.scaling_plan_config.add_tags, var.add_tags)
 
   depends_on = [
     azurerm_role_assignment.scaling_role_assignment,

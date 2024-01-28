@@ -15,12 +15,12 @@ resource "azurerm_virtual_desktop_host_pool" "pool" {
   validate_environment  = var.avd_host_pool_config.validate_environment
   custom_rdp_properties = var.avd_host_pool_config.custom_rdp_properties
 
-  type                             = var.avd_host_pool_config.type
+  type                             = var.avd_host_pool_config.type == "Desktop" ? "Personal" : "Pooled"
   load_balancer_type               = var.avd_host_pool_config.type == "Personal" ? "Persistent" : var.avd_host_pool_config.load_balancer_type
   personal_desktop_assignment_type = var.avd_host_pool_config.type == "Personal" ? var.avd_host_pool_config.personal_desktop_assignment_type : null
   maximum_sessions_allowed         = var.avd_host_pool_config.type == "Pooled" ? var.avd_host_pool_config.maximum_sessions_allowed : null
   preferred_app_group_type         = coalesce(var.avd_host_pool_config.preferred_app_group_type, var.avd_application_group_config.type == "Desktop" ? "Desktop" : "RailApplications")
-  start_vm_on_connect              = var.avd_host_pool_config.start_vm_on_connect
+  start_vm_on_connect              = var.avd_host_pool_config.type != "Application" ? true : false
 
   scheduled_agent_updates {
     enabled                   = var.avd_host_pool_config.scheduled_agent_updates.enabled
@@ -38,6 +38,12 @@ resource "azurerm_virtual_desktop_host_pool" "pool" {
 
   tags = merge(local.default_tags, var.add_tags)
 
+  lifecycle {
+    ignore_changes = [
+      description,
+      custom_rdp_properties
+    ]
+  }
 }
 
 # `terraform/tfwrapper taint module.avd.time_rotating.time` to force recreation
@@ -53,7 +59,7 @@ resource "time_rotating" "time" {
 # AZURE Host Pool Registration Info
 ##############################################
 
-resource "azurerm_virtual_desktop_host_pool_registration_info" "example" {
+resource "azurerm_virtual_desktop_host_pool_registration_info" "host_pool_registration_info" {
   hostpool_id     = azurerm_virtual_desktop_host_pool.pool.id
   expiration_date = time_rotating.time.rotation_rfc3339
 }

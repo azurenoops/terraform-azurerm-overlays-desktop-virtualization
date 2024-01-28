@@ -29,25 +29,25 @@ variable "custom_resource_group_name" {
   default     = null
 }
 
-variable "workspace_custom_name" {
+variable "custom_workspace_custom_name" {
   description = "Custom Azure Virtual Desktop workspace name, generated if not set."
   type        = string
   default     = ""
 }
 
-variable "host_pool_custom_name" {
+variable "custom_host_pool_custom_name" {
   description = "Custom Azure Virtual Desktop host pool name, generated if not set."
   type        = string
   default     = ""
 }
 
-variable "application_group_custom_name" {
+variable "custom_application_group_custom_name" {
   description = "Custom Azure Virtual Desktop Application Group name, generated if not set."
   type        = string
   default     = ""
 }
 
-variable "scaling_plan_custom_name" {
+variable "custom_scaling_plan_custom_name" {
   description = "Custom Azure Virtual Desktop Scaling Plan name, generated if not set."
   type        = string
   default     = ""

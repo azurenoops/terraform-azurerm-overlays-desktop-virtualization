@@ -6,20 +6,19 @@
 ##############################################
 
 resource "azurerm_virtual_desktop_application_group" "app_group" {
-  name     = local.avd_app_group_name
-  location = local.location
+  for_each = toset(local.aad_group_list)
+
+  name     = "${local.avd_app_group_name}${format("%02d", "${index(local.aad_group_list, each.value) + 1}")}"
+  location = local.location  
 
   resource_group_name = local.resource_group_name
+  host_pool_id = azurerm_virtual_desktop_host_pool.pool.id
 
-  host_pool_id = azurerm_virtual_desktop_host_pool.host_pool.id
+  friendly_name       = "${each.value} application group"
+  description         = "${each.value} application group - created with Azure NoOps."
+  type = var.avd_application_group_config.type == "Application" ? "RemoteApp" : "Desktop"
 
-  friendly_name                = coalesce(var.avd_application_group_config.friendly_name, local.avd_app_group_name)
-  default_desktop_display_name = var.avd_application_group_config.type == "Desktop" ? var.avd_application_group_config.default_desktop_display_name : null
-  description                  = var.avd_application_group_config.description
-
-  type = var.avd_application_group_config.type
-
-  tags = merge(local.default_tags, var.avd_application_group_config.extra_tags, var.add_tags)
+  tags = merge(local.default_tags, var.avd_application_group_config.add_tags, var.add_tags)
 }
 
 ##################################################
@@ -27,6 +26,19 @@ resource "azurerm_virtual_desktop_application_group" "app_group" {
 ##################################################
 
 resource "azurerm_virtual_desktop_workspace_application_group_association" "workspace_app_group_association" {
+  for_each             = toset(local.aad_group_list)
   workspace_id         = azurerm_virtual_desktop_workspace.workspace.id
-  application_group_id = azurerm_virtual_desktop_application_group.app_group.id
+  application_group_id = azurerm_virtual_desktop_application_group.app_group[each.value].id
+}
+
+##############################################################
+# AZURE VIRTUAL DESKTOP AAD group role and scope assignment
+##############################################################
+
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment
+resource "azurerm_role_assignment" "rbac" {
+  for_each           = toset(local.aad_group_list)
+  scope              = azurerm_virtual_desktop_application_group.app_group[each.value].id
+  role_definition_id = data.azurerm_role_definition.avduser_role.id
+  principal_id       = data.azuread_group.aad_group[each.value].id
 }
