@@ -67,7 +67,7 @@ module "mod_virtual_machine" {
   custom_image = each.value.custom_image != null ? each.value.custom_image : null
 
   # Custom Image Plan
-  custom_image_plan = each.value.custom_image != null && each.value.custom_image.plan != null ? each.value.custom_image.plan : null
+  custom_image_plan = each.value.custom_image != null ? each.value.custom_image.plan : null
 
   # Virtual Machine Private IP Address
   private_ip_address_allocation_type = each.value.private_ip_address_allocation_type # Static or Dynamic
