@@ -29,7 +29,7 @@ resource "azurerm_private_endpoint" "pep" {
     name                           = "avd-privatelink"
     is_manual_connection           = false
     private_connection_resource_id = azurerm_virtual_desktop_workspace.workspace.id
-    subresource_names              = ["feed", "global"]
+    subresource_names              = ["feed"]
   }
 }
 
