@@ -30,6 +30,6 @@ locals {
 
 # Locates unique AAD groups for application group for_each loop. 
 locals {
-  aad_group_list = var.avd_application_config != null ? distinct(values({ for k, v in var.avd_application_config : k => v.aad_group })) : ["${var.avd_vm_config.aad_group_desktop}"]
+  aad_group_list = var.avd_application_config != null ? distinct(values({ for k, v in var.avd_application_config : k => v.aad_group })) : distinct(values({ for k, v in var.avd_vm_config : k => v.aad_group_desktop }))
   applications   = var.avd_application_config != null ? var.avd_application_config : tomap({}) # Null is not accepted as for_each value, substituing for an empty map if null.
 }
