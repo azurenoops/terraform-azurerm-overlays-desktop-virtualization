@@ -52,4 +52,3 @@ variable "existing_resource_group_name" {
   type        = string
   default     = null
 }
-

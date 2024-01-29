@@ -22,10 +22,7 @@ module "mod_avd" {
 
   # AVD Workspace details
   avd_workspace_config = {
-    public_network_access_enabled         = false
-    enable_private_endpoint               = true
-    existing_private_virtual_network_name = azurerm_virtual_network.avd-vnet.name
-    existing_private_subnet_name          = azurerm_subnet.avd-snet.name
+    public_network_access_enabled = false
     add_tags = {
       foo = "bar"
     }
@@ -53,7 +50,29 @@ module "mod_avd" {
 
   # AVD Application Group details
   avd_application_group_config = {
-    type = "Desktop"
+    type = "Application"
+  }
+
+  # AVD Application details
+  avd_application_config = {
+    notepad = {
+      app_name                     = "Notepad"
+      friendly_name                = "Notepad"
+      description                  = "Description"
+      path                         = "C:\\Windows\\System32\\notepad.exe"
+      command_line_argument_policy = "Allow"
+      aad_group                    = "SG-BlueApp-Users"
+      add_tags                     = {}
+    },
+    calc = {
+      app_name                     = "Calculator"
+      friendly_name                = "Calculator"
+      description                  = "Description"
+      path                         = "C:\\Windows\\System32\\calc.exe"
+      command_line_argument_policy = "Allow"
+      aad_group                    = "SG-RedApp-Users"
+      add_tags                     = {}
+    }
   }
 
   avd_vm_config = {
@@ -65,7 +84,7 @@ module "mod_avd" {
       aad_group_desktop                            = "SG-AVD-PersonalDesktop-Users"
       admin_username                               = "azureuser"
       admin_password                               = "P@ssw0rd1234"
-      instances_count                              = 20
+      instances_count                              = 5
       private_ip_address_allocation_type           = "Dynamic"
       existing_virtual_network_resource_group_name = azurerm_resource_group.avd-network-rg.name
       existing_virtual_network_name                = azurerm_virtual_network.avd-vnet.name
@@ -121,6 +140,6 @@ module "mod_avd" {
 
   # Adding additional TAG's to your Azure resources
   add_tags = {
-    Example = "basic_avd_app_group_new_rg"
+    Example = "basic_avd_mult_app_groups_using_existing_RG"
   }
 }
