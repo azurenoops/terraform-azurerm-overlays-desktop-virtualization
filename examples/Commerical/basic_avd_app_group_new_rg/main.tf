@@ -24,6 +24,7 @@ module "mod_avd" {
   avd_workspace_config = {
     public_network_access_enabled         = false
     enable_private_endpoint               = true
+    existing_private_resource_group_name  = azurerm_resource_group.avd-network-rg.name
     existing_private_virtual_network_name = azurerm_virtual_network.avd-vnet.name
     existing_private_subnet_name          = azurerm_subnet.avd-snet.name
     add_tags = {

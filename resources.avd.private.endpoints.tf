@@ -7,14 +7,14 @@
 data "azurerm_virtual_network" "vnet" {
   count               = var.avd_workspace_config.enable_private_endpoint && var.avd_workspace_config.existing_private_virtual_network_name != null ? 1 : 0
   name                = var.avd_workspace_config.existing_private_virtual_network_name
-  resource_group_name = local.resource_group_name
+  resource_group_name = var.avd_workspace_config.existing_private_virtual_network_resource_group_name
 }
 
 data "azurerm_subnet" "snet" {
   count                = var.avd_workspace_config.enable_private_endpoint && var.avd_workspace_config.existing_private_subnet_name != null ? 1 : 0
   name                 = var.avd_workspace_config.existing_private_subnet_name
   virtual_network_name = data.azurerm_virtual_network.vnet.0.name
-  resource_group_name  = local.resource_group_name
+  resource_group_name  = var.avd_workspace_config.existing_private_virtual_network_resource_group_name
 }
 
 resource "azurerm_private_endpoint" "pep" {
