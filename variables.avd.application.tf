@@ -19,5 +19,5 @@ variable "avd_application_config" {
     aad_group                    = optional(string)
     add_tags                     = optional(map(string))
   }))
-  default = {}
+  default = null
 }

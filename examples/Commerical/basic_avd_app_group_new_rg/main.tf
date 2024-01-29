@@ -66,7 +66,7 @@ module "mod_avd" {
       aad_group_desktop                            = "SG-AVD-PersonalDesktop-Users"
       admin_username                               = "azureuser"
       admin_password                               = "P@ssw0rd1234"
-      instances_count                              = 20
+      instances_count                              = 5
       private_ip_address_allocation_type           = "Dynamic"
       existing_virtual_network_resource_group_name = azurerm_resource_group.avd-network-rg.name
       existing_virtual_network_name                = azurerm_virtual_network.avd-vnet.name
