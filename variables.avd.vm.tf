@@ -30,9 +30,10 @@ variable "avd_vm_config" {
     source_image_id                              = optional(string, null)
     custom_data                                  = optional(string, null)
     custom_image = optional(object({
-      name      = string
-      product   = string
       publisher = string
+      offer     = string
+      sku       = string
+      version   = string
       plan = object({
         name      = string
         product   = string
