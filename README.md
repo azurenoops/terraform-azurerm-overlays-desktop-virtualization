@@ -407,7 +407,7 @@ module "mod_avd" {
   }
 ```
 
-### AVD Shared Image (Comming Soon)
+### AVD Shared Image (Coming Soon)
 
 The Azure Virtual Desktop Shared Image is a shared image that is used to create the Azure Virtual Desktop Virtual Machines.
 
@@ -445,23 +445,26 @@ Tag names are case-insensitive for operations. A tag with a tag name, regardless
 
 An effective naming convention assembles resource names by using important resource information as parts of a resource's name. For example, using these [recommended naming conventions](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/naming-and-tagging#example-names), a public IP resource for a production SharePoint workload is named like this: `pip-sharepoint-prod-westus-001`.
 
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
+| <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | ~> 2.47 |
 | <a name="requirement_azurenoopsutils"></a> [azurenoopsutils](#requirement\_azurenoopsutils) | ~> 1.0.4 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.36 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.69 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.10 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 2.47 |
 | <a name="provider_azurenoopsutils"></a> [azurenoopsutils](#provider\_azurenoopsutils) | ~> 1.0.4 |
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.36 |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
-| <a name="provider_time"></a> [time](#provider\_time) | n/a |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.69 |
+| <a name="provider_time"></a> [time](#provider\_time) | ~> 0.10 |
 
 ## Modules
 
@@ -469,111 +472,88 @@ An effective naming convention assembles resource names by using important resou
 |------|--------|---------|
 | <a name="module_mod_azure_region_lookup"></a> [mod\_azure\_region\_lookup](#module\_mod\_azure\_region\_lookup) | azurenoops/overlays-azregions-lookup/azurerm | ~> 1.0.0 |
 | <a name="module_mod_scaffold_rg"></a> [mod\_scaffold\_rg](#module\_mod\_scaffold\_rg) | azurenoops/overlays-resource-group/azurerm | ~> 1.0.1 |
+| <a name="module_mod_virtual_machine"></a> [mod\_virtual\_machine](#module\_mod\_virtual\_machine) | azurenoops/overlays-virtual-machine/azurerm | ~> 2.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [azurerm_key_vault_access_policy.deployer](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
-| [azurerm_key_vault_access_policy.workspace_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
-| [azurerm_key_vault_key.key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_key) | resource |
-| [azurerm_management_lock.resource_group_level_lock](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) | resource |
-| [azurerm_private_dns_a_record.a_rec_dev](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_a_record) | resource |
-| [azurerm_private_dns_a_record.a_rec_sql](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_a_record) | resource |
-| [azurerm_private_dns_zone.dev_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) | resource |
-| [azurerm_private_dns_zone.sql_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) | resource |
-| [azurerm_private_dns_zone_virtual_network_link.dev_vnet_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
-| [azurerm_private_dns_zone_virtual_network_link.sql_vnet_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
-| [azurerm_private_endpoint.pep_dev](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
-| [azurerm_private_endpoint.pep_sql](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
-| [azurerm_role_assignment.audit_storage](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
-| [azurerm_storage_data_lake_gen2_filesystem.datalake](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_data_lake_gen2_filesystem) | resource |
-| [azurerm_synapse_firewall_rule.rules](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_firewall_rule) | resource |
-| [azurerm_synapse_linked_service.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_linked_service) | resource |
-| [azurerm_synapse_managed_private_endpoint.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_managed_private_endpoint) | resource |
-| [azurerm_synapse_spark_pool.pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_spark_pool) | resource |
-| [azurerm_synapse_sql_pool.sql_pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_sql_pool) | resource |
-| [azurerm_synapse_workspace.synapse](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace) | resource |
-| [azurerm_synapse_workspace_extended_auditing_policy.synapse_auditing_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_extended_auditing_policy) | resource |
-| [azurerm_synapse_workspace_key.workspace_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_key) | resource |
-| [azurerm_synapse_workspace_security_alert_policy.synapse_workspace_security_alert_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_security_alert_policy) | resource |
-| [azurerm_synapse_workspace_vulnerability_assessment.synapse_workspace_vulnerability_assessment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_workspace_vulnerability_assessment) | resource |
-| [random_password.synapse_sql_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
-| [time_offset.pike](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/offset) | resource |
-| [azurenoopsutils_resource_name.rg](https://registry.terraform.io/providers/azurenoops/azurenoopsutils/latest/docs/data-sources/resource_name) | data source |
-| [azurenoopsutils_resource_name.synapse](https://registry.terraform.io/providers/azurenoops/azurenoopsutils/latest/docs/data-sources/resource_name) | data source |
-| [azurerm_private_endpoint_connection.pip_dev](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/private_endpoint_connection) | data source |
-| [azurerm_private_endpoint_connection.pip_sql](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/private_endpoint_connection) | data source |
+| [azurerm_management_lock.azurerm_virtual_desktop_host_pool_level_lock](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) | resource |
+| [azurerm_management_lock.azurerm_virtual_desktop_workspace_level_lock](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) | resource |
+| [azurerm_role_assignment.rbac](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+| [azurerm_role_assignment.scaling_role_assignment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+| [azurerm_role_definition.scaling_role_definition](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_definition) | resource |
+| [azurerm_virtual_desktop_application.application](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_application) | resource |
+| [azurerm_virtual_desktop_application_group.app_group](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_application_group) | resource |
+| [azurerm_virtual_desktop_host_pool.pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_host_pool) | resource |
+| [azurerm_virtual_desktop_host_pool_registration_info.host_pool_registration_info](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_host_pool_registration_info) | resource |
+| [azurerm_virtual_desktop_scaling_plan.scaling_plan](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_scaling_plan) | resource |
+| [azurerm_virtual_desktop_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_workspace) | resource |
+| [azurerm_virtual_desktop_workspace_application_group_association.workspace_app_group_association](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_desktop_workspace_application_group_association) | resource |
+| [time_rotating.time](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/rotating) | resource |
+| [azuread_group.aad_group](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/group) | data source |
+| [azuread_service_principal.avd_service_principal](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/service_principal) | data source |
+| [azurenoopsutils_resource_name.avd_application_group](https://registry.terraform.io/providers/azurenoops/azurenoopsutils/latest/docs/data-sources/resource_name) | data source |
+| [azurenoopsutils_resource_name.avd_host_pool](https://registry.terraform.io/providers/azurenoops/azurenoopsutils/latest/docs/data-sources/resource_name) | data source |
+| [azurenoopsutils_resource_name.avd_scaling_plan](https://registry.terraform.io/providers/azurenoops/azurenoopsutils/latest/docs/data-sources/resource_name) | data source |
+| [azurenoopsutils_resource_name.avd_workspace](https://registry.terraform.io/providers/azurenoops/azurenoopsutils/latest/docs/data-sources/resource_name) | data source |
+| [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
 | [azurerm_resource_group.rgrp](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
-| [azurerm_storage_account.audit_logs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
-| [azurerm_storage_account.auditing_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
-| [azurerm_storage_container.vulnerability_assessment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_container) | data source |
-| [azurerm_subnet.snet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
-| [azurerm_virtual_network.vnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/virtual_network) | data source |
+| [azurerm_role_definition.avduser_role](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/role_definition) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_aad_admins"></a> [aad\_admins](#input\_aad\_admins) | The AAD admins of this workspace. Conflicts with customer\_managed\_key | <pre>list(object({<br>    login     = string<br>    object_id = string<br>    tenant_id = string<br>  }))</pre> | `[]` | no |
+| <a name="input_aad_group_desktop"></a> [aad\_group\_desktop](#input\_aad\_group\_desktop) | The desktop pool's assignment AAD group. Required if var.avd\_host\_pool\_config.type != application. | `string` | `null` | no |
 | <a name="input_add_tags"></a> [add\_tags](#input\_add\_tags) | Map of custom tags. | `map(string)` | `{}` | no |
-| <a name="input_allowed_firewall_rules"></a> [allowed\_firewall\_rules](#input\_allowed\_firewall\_rules) | List  of rules allowing certain ips through the firewall. | <pre>list(object({<br>    name : string<br>    start_ip_address : string<br>    end_ip_address : string<br>  }))</pre> | `null` | no |
-| <a name="input_audit_retention_in_days"></a> [audit\_retention\_in\_days](#input\_audit\_retention\_in\_days) | Number of days for retention of security policies | `number` | `30` | no |
-| <a name="input_auditing_policy_storage_account_id"></a> [auditing\_policy\_storage\_account\_id](#input\_auditing\_policy\_storage\_account\_id) | ID of SQL audit policy storage account | `string` | `null` | no |
-| <a name="input_azure_devops_configuration"></a> [azure\_devops\_configuration](#input\_azure\_devops\_configuration) | Configuration for connecting the workspace to a Azure Devops repo. | <pre>object({<br>    account_name    = string<br>    branch_name     = string<br>    last_commit_id  = optional(string)<br>    project_name    = string<br>    repository_name = string<br>    root_folder     = string<br>    tenant_id       = string<br>  })</pre> | `null` | no |
-| <a name="input_compute_subnet_id"></a> [compute\_subnet\_id](#input\_compute\_subnet\_id) | Subnet ID used for computes in workspace | `string` | `null` | no |
-| <a name="input_create_synapse_resource_group"></a> [create\_synapse\_resource\_group](#input\_create\_synapse\_resource\_group) | Create a resource group for the Synapse Workspace. If set to false, the existing\_resource\_group\_name variable must be set. Default is false. | `bool` | `false` | no |
+| <a name="input_avd_application_config"></a> [avd\_application\_config](#input\_avd\_application\_config) | AVD Application specific configuration. | <pre>map(object({<br>    app_name                     = optional(string)<br>    friendly_name                = optional(string)<br>    description                  = optional(string)<br>    path                         = optional(string)<br>    command_line_arguments       = optional(string)<br>    show_in_portal               = optional(bool, false)<br>    icon_path                    = optional(string)<br>    icon_index                   = optional(number)<br>    aad_group                    = optional(string)<br>    add_tags                     = optional(map(string))<br>  }))</pre> | `{}` | no |
+| <a name="input_avd_application_group_config"></a> [avd\_application\_group\_config](#input\_avd\_application\_group\_config) | AVD Application Group specific configuration. | <pre>object({<br>    type                         = optional(string, "Desktop")<br>    add_tags                     = optional(map(string))<br>  })</pre> | `null` | no |
+| <a name="input_avd_host_pool_config"></a> [avd\_host\_pool\_config](#input\_avd\_host\_pool\_config) | AVD Host Pool specific configuration. | <pre>object({<br>    friendly_name                         = optional(string)<br>    description                           = optional(string)<br>    validate_environment                  = optional(bool, true)<br>    custom_rdp_properties                 = optional(string, "drivestoredirect:s:*;audiomode:i:0;videoplaybackmode:i:1;redirectclipboard:i:1;redirectprinters:i:1;devicestoredirect:s:*;redirectcomports:i:1;redirectsmartcards:i:1;usbdevicestoredirect:s:*;enablecredsspsupport:i:1;use multimon:i:1;")<br>    type                                  = optional(string, "Pooled")<br>    load_balancer_type                    = optional(string, "DepthFirst")<br>    personal_desktop_assignment_type      = optional(string, "Automatic")<br>    maximum_sessions_allowed              = optional(number, 16)<br>    preferred_app_group_type              = optional(string)<br>    host_registration_expires_in_in_hours = optional(number, 48)<br>    scheduled_agent_updates = optional(object({<br>      enabled                   = optional(bool, false)<br>      timezone                  = optional(string, "UTC") # https://jackstromberg.com/2017/01/list-of-time-zones-consumed-by-azure/<br>      use_session_host_timezone = optional(bool, false)<br>      schedules = optional(list(object({<br>        day_of_week = string<br>        hour_of_day = number<br>      })), [])<br>    }), {})<br>    add_tags = optional(map(string))<br>  })</pre> | `{}` | no |
+| <a name="input_avd_shared_image"></a> [avd\_shared\_image](#input\_avd\_shared\_image) | AVD Shared Image specific configuration. | <pre>object({<br>    sig_image_name = optional(string)<br>    os_type        = optional(string)<br>    identifier = optional(object({<br>      publisher = optional(string)<br>      offer     = optional(string)<br>      sku       = optional(string)<br>    }))<br>  })</pre> | `{}` | no |
+| <a name="input_avd_vm_config"></a> [avd\_vm\_config](#input\_avd\_vm\_config) | AVD Virtual Machine configuration. | <pre>map(object({<br>    distribution_name                            = optional(string, "windows2019dc")<br>    virtual_machine_size                         = optional(string, "standard_d2as_v4")<br>    aad_group_desktop                            = optional(string, null)<br>    os_type                                      = optional(string, "Windows")<br>    disable_password_authentication              = optional(bool, false)<br>    admin_ssh_key_data                           = optional(string, null)<br>    admin_username                               = optional(string, "azureadmin")<br>    admin_password                               = optional(string, null)<br>    instances_count                              = optional(number, 0)<br>    enable_proximity_placement_group             = optional(bool, false)<br>    enable_vm_availability_set                   = optional(bool, false)<br>    enable_public_ip_address                     = optional(bool, false)<br>    enable_automatic_updates                     = optional(bool, false)<br>    existing_network_security_group_name         = optional(string, null)<br>    license_type                                 = optional(string, "None")<br>    private_ip_address_allocation_type           = optional(string, "Dynamic")<br>    private_ip_address                           = optional(list(string), null)<br>    existing_virtual_network_name                = optional(string, null)<br>    existing_virtual_network_resource_group_name = optional(string, null)<br>    existing_subnet_name                         = optional(string, null)<br>    source_image_id                              = optional(string, null)<br>    custom_data                                  = optional(string, null)<br>    custom_image = optional(object({<br>      name      = string<br>      product   = string<br>      publisher = string<br>      plan = object({<br>        name      = string<br>        product   = string<br>        publisher = string<br>      })<br>    }), null)<br>    nsg_inbound_rules = optional(list(object({<br>      name                   = optional(string)<br>      destination_port_range = optional(string)<br>      source_address_prefix  = optional(string)<br>    })), [])<br>    enable_boot_diagnostics = optional(bool, false)<br>    data_disks = optional(list(object({<br>      name                      = optional(string)<br>      caching                   = optional(string)<br>      create_option             = optional(string)<br>      disk_size_gb              = optional(number)<br>      lun                       = optional(number)<br>      managed_disk_type         = optional(string)<br>      storage_account_type      = optional(string)<br>      write_accelerator_enabled = optional(bool)<br>    })), [])<br>    deploy_log_analytics_agent                 = optional(bool, false)<br>    log_analytics_workspace_id                 = optional(string, null)<br>    log_analytics_customer_id                  = optional(string, null)<br>    log_analytics_workspace_primary_shared_key = optional(string, null)<br>    add_tags                                   = optional(map(string))<br>  }))</pre> | `null` | no |
+| <a name="input_avd_workspace_config"></a> [avd\_workspace\_config](#input\_avd\_workspace\_config) | AVD Workspace specific configuration. | <pre>object({<br>    friendly_name                 = optional(string)<br>    description                   = optional(string)<br>    public_network_access_enabled = optional(bool)<br>    add_tags                      = optional(map(string))<br>  })</pre> | `{}` | no |
+| <a name="input_create_avd_resource_group"></a> [create\_avd\_resource\_group](#input\_create\_avd\_resource\_group) | Create a resource group for the AVD Workspace. If set to false, the existing\_resource\_group\_name variable must be set. Default is false. | `bool` | `false` | no |
+| <a name="input_custom_application_group_custom_name"></a> [custom\_application\_group\_custom\_name](#input\_custom\_application\_group\_custom\_name) | Custom Azure Virtual Desktop Application Group name, generated if not set. | `string` | `""` | no |
+| <a name="input_custom_host_pool_custom_name"></a> [custom\_host\_pool\_custom\_name](#input\_custom\_host\_pool\_custom\_name) | Custom Azure Virtual Desktop host pool name, generated if not set. | `string` | `""` | no |
 | <a name="input_custom_resource_group_name"></a> [custom\_resource\_group\_name](#input\_custom\_resource\_group\_name) | The name of the custom resource group to create. If not set, the name will be generated using the `org_name`, `workload_name`, `deploy_environment` and `environment` variables. | `string` | `null` | no |
-| <a name="input_custom_synapse_workspace_name"></a> [custom\_synapse\_workspace\_name](#input\_custom\_synapse\_workspace\_name) | The name of the custom Synapse Workspace to create. If not set, the name will be generated using the `org_name`, `workload_name`, `deploy_environment` and `environment` variables. | `string` | `null` | no |
-| <a name="input_data_exfiltration_protection_enabled"></a> [data\_exfiltration\_protection\_enabled](#input\_data\_exfiltration\_protection\_enabled) | Is data exfiltration protection enabled in this workspace ? | `bool` | `false` | no |
+| <a name="input_custom_scaling_plan_custom_name"></a> [custom\_scaling\_plan\_custom\_name](#input\_custom\_scaling\_plan\_custom\_name) | Custom Azure Virtual Desktop Scaling Plan name, generated if not set. | `string` | `""` | no |
+| <a name="input_custom_workspace_custom_name"></a> [custom\_workspace\_custom\_name](#input\_custom\_workspace\_custom\_name) | Custom Azure Virtual Desktop workspace name, generated if not set. | `string` | `""` | no |
 | <a name="input_default_tags_enabled"></a> [default\_tags\_enabled](#input\_default\_tags\_enabled) | Option to enable or disable default tags. | `bool` | `true` | no |
 | <a name="input_deploy_environment"></a> [deploy\_environment](#input\_deploy\_environment) | Name of the workload's environment | `string` | n/a | yes |
-| <a name="input_enable_audit_log_monitoring"></a> [enable\_audit\_log\_monitoring](#input\_enable\_audit\_log\_monitoring) | Enables or disabled audit log monitorng. | `bool` | `true` | no |
-| <a name="input_enable_customer_managed_keys"></a> [enable\_customer\_managed\_keys](#input\_enable\_customer\_managed\_keys) | Enable customer managed keys for this workspace. Default is false. | `bool` | `false` | no |
-| <a name="input_enable_managed_virtual_network"></a> [enable\_managed\_virtual\_network](#input\_enable\_managed\_virtual\_network) | Is managed virtual network enabled in this workspace? | `bool` | `true` | no |
-| <a name="input_enable_private_endpoint"></a> [enable\_private\_endpoint](#input\_enable\_private\_endpoint) | Manages a Private Endpoint to Azure Container Registry. Default is false. | `bool` | `false` | no |
 | <a name="input_enable_resource_locks"></a> [enable\_resource\_locks](#input\_enable\_resource\_locks) | (Optional) Enable resource locks, default is false. If true, resource locks will be created for the resource group and the storage account. | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The Terraform backend environment e.g. public or usgovernment | `string` | n/a | yes |
-| <a name="input_existing_dev_private_dns_zone"></a> [existing\_dev\_private\_dns\_zone](#input\_existing\_dev\_private\_dns\_zone) | Name of the existing synapse dev private DNS zone | `any` | `null` | no |
-| <a name="input_existing_private_subnet_name"></a> [existing\_private\_subnet\_name](#input\_existing\_private\_subnet\_name) | Name of the existing subnet for the private endpoint | `any` | `null` | no |
 | <a name="input_existing_resource_group_name"></a> [existing\_resource\_group\_name](#input\_existing\_resource\_group\_name) | The name of the existing resource group to use. If not set, the name will be generated using the `org_name`, `workload_name`, `deploy_environment` and `environment` variables. | `string` | `null` | no |
-| <a name="input_existing_sql_private_dns_zone"></a> [existing\_sql\_private\_dns\_zone](#input\_existing\_sql\_private\_dns\_zone) | Name of the existing synapse sql private DNS zone | `any` | `null` | no |
-| <a name="input_existing_virtual_network_name"></a> [existing\_virtual\_network\_name](#input\_existing\_virtual\_network\_name) | Name of the virtual network for the private endpoint | `any` | `null` | no |
-| <a name="input_existing_web_private_dns_zone"></a> [existing\_web\_private\_dns\_zone](#input\_existing\_web\_private\_dns\_zone) | Name of the existing synapse web private DNS zone | `any` | `null` | no |
-| <a name="input_github_repo"></a> [github\_repo](#input\_github\_repo) | Configuration for connecting the workspace to a GitHub repo. | <pre>object({<br>    account_name    = string<br>    branch_name     = string<br>    last_commit_id  = optional(string, null)<br>    repository_name = string<br>    root_folder     = optional(string, "/")<br>    git_url         = optional(string, null)<br>  })</pre> | `null` | no |
-| <a name="input_identity_ids"></a> [identity\_ids](#input\_identity\_ids) | Specifies a list of User Assigned Managed Identity IDs to be assigned to this Storage Account. | `list(string)` | `null` | no |
-| <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type) | Specifies the type of Managed Service Identity that should be configured on this Storage Account. Possible values are `SystemAssigned`, `UserAssigned`, `SystemAssigned, UserAssigned` (to enable both). | `string` | `"SystemAssigned"` | no |
-| <a name="input_key_vault_id"></a> [key\_vault\_id](#input\_key\_vault\_id) | The ID of the key vault to be used for customer managed keys | `string` | `null` | no |
-| <a name="input_linked_services"></a> [linked\_services](#input\_linked\_services) | List over linked services. | <pre>list(object({<br>    name : string<br>    type : string<br>    type_properties : map(any)<br>    additional_properties : optional(map(string), null)<br>    annotations : optional(list(string), [])<br>    description : optional(string, "")<br>    integration_runtime = optional(object({<br>      name : optional(string, null)<br>      parameters : optional(map(string), null)<br>    }), null)<br>    parameters : optional(map(string), null)<br>  }))</pre> | `[]` | no |
-| <a name="input_linking_allowed_for_aad_tenant_ids"></a> [linking\_allowed\_for\_aad\_tenant\_ids](#input\_linking\_allowed\_for\_aad\_tenant\_ids) | Allowed Aad Tenant Ids For Linking | `list(string)` | `[]` | no |
 | <a name="input_location"></a> [location](#input\_location) | Azure region in which instance will be hosted | `string` | n/a | yes |
 | <a name="input_lock_level"></a> [lock\_level](#input\_lock\_level) | (Optional) id locks are enabled, Specifies the Level to be used for this Lock. | `string` | `"CanNotDelete"` | no |
-| <a name="input_managed_private_endpoints"></a> [managed\_private\_endpoints](#input\_managed\_private\_endpoints) | List over managed private endpoints. | <pre>list(object({<br>    name : string<br>    target_resource_id : string<br>    subresource_name : string<br>  }))</pre> | `[]` | no |
-| <a name="input_managed_resource_group_name"></a> [managed\_resource\_group\_name](#input\_managed\_resource\_group\_name) | Workspace managed resource group name | `string` | `null` | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | Optional prefix for the generated name | `string` | `""` | no |
 | <a name="input_name_suffix"></a> [name\_suffix](#input\_name\_suffix) | Optional suffix for the generated name | `string` | `""` | no |
-| <a name="input_object_id"></a> [object\_id](#input\_object\_id) | The object ID of the key vault user principal id to be used for customer managed keys | `string` | `null` | no |
 | <a name="input_org_name"></a> [org\_name](#input\_org\_name) | Name of the organization | `string` | n/a | yes |
-| <a name="input_purview_id"></a> [purview\_id](#input\_purview\_id) | The ID of purview account. | `string` | `null` | no |
-| <a name="input_saas_connection"></a> [saas\_connection](#input\_saas\_connection) | Used to configure Public Network Access | `bool` | `false` | no |
-| <a name="input_spark_pools"></a> [spark\_pools](#input\_spark\_pools) | A list of Spark pools to create. | <pre>list(object({<br>    name : string<br>    node_size_family : string<br>    node_size : string<br>    node_count : optional(number, null)<br>    auto_pause_delay_in_minutes : optional(number, 5)<br>    auto_scale : optional(object({<br>      max_node_count : number<br>      min_node_count : number<br>    }), null)<br>    cache_size : optional(number, null)<br>    compute_isolation_enabled : optional(bool, false)<br>    dynamic_executor_allocation_enabled : optional(bool, true)<br>    min_executors : optional(number, 1)<br>    max_executors : optional(number, 2)<br>    library_requirement : optional(object({<br>      content : string<br>      filename : string<br>    }), null)<br>    session_level_packages_enabled : optional(bool, false)<br>    spark_config : optional(object({<br>      content : string<br>      filename : string<br>    }), null)<br>    spark_log_folder : optional(string, null)<br>    spark_events_folder : optional(string, null)<br>    spark_version : optional(string, null)<br>    tags : optional(map(string), null)<br>  }))</pre> | `[]` | no |
-| <a name="input_sql_aad_admins"></a> [sql\_aad\_admins](#input\_sql\_aad\_admins) | The SQL AAD admins of this workspace | <pre>set(object({<br>    login     = string<br>    object_id = string<br>    tenant_id = string<br>  }))</pre> | `[]` | no |
-| <a name="input_sql_administrator_login"></a> [sql\_administrator\_login](#input\_sql\_administrator\_login) | Administrator login of synapse sql database | `string` | n/a | yes |
-| <a name="input_sql_administrator_password"></a> [sql\_administrator\_password](#input\_sql\_administrator\_password) | Administrator password of synapse sql database | `string` | n/a | yes |
-| <a name="input_sql_defender"></a> [sql\_defender](#input\_sql\_defender) | Alert policy settings for the Synapse workspace. If null, no alert policy will be created. Audit\_container is a blob storage container path to hold the scan results and all Threat Detection audit logs. | <pre>object({<br>    state                        = optional(string, "Enabled")<br>    disabled_alerts              = optional(list(string), [])<br>    email_account_admins_enabled = optional(bool, false)<br>    alert_email_addresses        = optional(list(string), [])<br>    retention_days               = optional(number, 0)<br>    recurring_scans = optional(object({<br>      enabled                           = bool<br>      email_subscription_admins_enabled = bool<br>      emails                            = list(string)<br>    }))<br>    audit_container = optional(object({<br>      name                 = string<br>      storage_account_name = string<br>      resource_group_name  = string<br>    }))<br>  })</pre> | `null` | no |
-| <a name="input_sql_identity_control_enabled"></a> [sql\_identity\_control\_enabled](#input\_sql\_identity\_control\_enabled) | Are pipelines (running as workspace's system assigned identity) allowed to access SQL pools? | `bool` | `false` | no |
-| <a name="input_sql_pools"></a> [sql\_pools](#input\_sql\_pools) | A list of sql pools to create. | <pre>list(object({<br>    name : string<br>    sku_name : string<br>    create_mode : optional(string, "Default")<br>    collation : optional(string, "SQL_LATIN1_GENERAL_CP1_CI_AS")<br>    data_encrypted : optional(string, true)<br>    recovery_database_id : optional(string, null)<br>    restore : optional(object({<br>      source_database_id : optional(string)<br>      point_in_time : optional(string)<br>    }), null)<br>    geo_backup_policy_enabled : optional(bool, true)<br>    tags : optional(map(string), null)<br>  }))</pre> | `[]` | no |
-| <a name="input_storage_data_lake_gen2_id"></a> [storage\_data\_lake\_gen2\_id](#input\_storage\_data\_lake\_gen2\_id) | The ID of the storage account to be used for data lake gen2 | `string` | n/a | yes |
-| <a name="input_tenant_id"></a> [tenant\_id](#input\_tenant\_id) | The tenant ID of the key vault to be used for customer managed keys | `string` | `null` | no |
+| <a name="input_scaling_plan_config"></a> [scaling\_plan\_config](#input\_scaling\_plan\_config) | AVD Scaling Plan specific configuration. | <pre>object({<br>    enabled       = optional(bool, false)<br>    friendly_name = optional(string)<br>    description   = optional(string)<br>    exclusion_tag = optional(string)<br>    timezone      = optional(string, "UTC") # https://jackstromberg.com/2017/01/list-of-time-zones-consumed-by-azure/<br>    schedules = optional(list(object({<br>      name                                 = string<br>      days_of_week                         = list(string)<br>      peak_start_time                      = string<br>      peak_load_balancing_algorithm        = optional(string, "BreadthFirst")<br>      off_peak_start_time                  = string<br>      off_peak_load_balancing_algorithm    = optional(string, "DepthFirst")<br>      ramp_up_start_time                   = string<br>      ramp_up_load_balancing_algorithm     = optional(string, "BreadthFirst")<br>      ramp_up_capacity_threshold_percent   = optional(number, 75)<br>      ramp_up_minimum_hosts_percent        = optional(number, 33)<br>      ramp_down_start_time                 = string<br>      ramp_down_capacity_threshold_percent = optional(number, 5)<br>      ramp_down_force_logoff_users         = optional(string, false)<br>      ramp_down_load_balancing_algorithm   = optional(string, "DepthFirst")<br>      ramp_down_minimum_hosts_percent      = optional(number, 33)<br>      ramp_down_notification_message       = optional(string, "Please log off in the next 45 minutes...")<br>      ramp_down_stop_hosts_when            = optional(string, "ZeroSessions")<br>      ramp_down_wait_time_minutes          = optional(number, 45)<br>    })), [])<br>    role_assignment = optional(object({<br>      enabled      = optional(bool, true)<br>      principal_id = optional(string)<br>    }), {})<br>    add_tags = optional(map(string))<br>  })</pre> | `{}` | no |
 | <a name="input_use_location_short_name"></a> [use\_location\_short\_name](#input\_use\_location\_short\_name) | Use short location name for resources naming (ie eastus -> eus). Default is true. If set to false, the full cli location name will be used. if custom naming is set, this variable will be ignored. | `bool` | `true` | no |
-| <a name="input_use_naming"></a> [use\_naming](#input\_use\_naming) | Use the Azure NoOps naming provider to generate default resource name. `storage_account_custom_name` override this if set. Legacy default name is used if this is set to `false`. | `bool` | `true` | no |
+| <a name="input_use_naming"></a> [use\_naming](#input\_use\_naming) | Use the Azure NoOps naming provider to generate default resource name. `storage_account_custom_name` override this if set. Legacy default name is used if this is set to `false`. | `bool` | `false` | no |
 | <a name="input_workload_name"></a> [workload\_name](#input\_workload\_name) | Name of the workload\_name | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_connectivity_endpoints"></a> [connectivity\_endpoints](#output\_connectivity\_endpoints) | A list of connectivity endpoints for this Synapse Workspace. |
-| <a name="output_id"></a> [id](#output\_id) | Synapse ID |
-| <a name="output_name"></a> [name](#output\_name) | Synapse name |
+| <a name="output_application_groups"></a> [application\_groups](#output\_application\_groups) | AVD Application Group object output. |
+| <a name="output_avd_service_principal_client_id"></a> [avd\_service\_principal\_client\_id](#output\_avd\_service\_principal\_client\_id) | AVD Service Principal Client ID (Application ID). |
+| <a name="output_avd_service_principal_name"></a> [avd\_service\_principal\_name](#output\_avd\_service\_principal\_name) | AVD Service Principal name. |
+| <a name="output_avd_service_principal_object_id"></a> [avd\_service\_principal\_object\_id](#output\_avd\_service\_principal\_object\_id) | AVD Service Principal Object ID (Principal ID). |
+| <a name="output_host_pool"></a> [host\_pool](#output\_host\_pool) | AVD Host Pool object output. |
+| <a name="output_host_pool_id"></a> [host\_pool\_id](#output\_host\_pool\_id) | AVD Host Pool ID. |
+| <a name="output_host_pool_name"></a> [host\_pool\_name](#output\_host\_pool\_name) | AVD Host Pool name. |
+| <a name="output_host_registration_token"></a> [host\_registration\_token](#output\_host\_registration\_token) | AVD host registration token. |
+| <a name="output_host_registration_token_expiration_date"></a> [host\_registration\_token\_expiration\_date](#output\_host\_registration\_token\_expiration\_date) | AVD host registration token expiration date. |
+| <a name="output_scaling_plan"></a> [scaling\_plan](#output\_scaling\_plan) | AVD Scaling Plan object output. |
+| <a name="output_scaling_plan_id"></a> [scaling\_plan\_id](#output\_scaling\_plan\_id) | AVD Scaling Plan ID. |
+| <a name="output_scaling_plan_name"></a> [scaling\_plan\_name](#output\_scaling\_plan\_name) | AVD Scaling Plan name. |
+| <a name="output_scaling_plan_role_definition"></a> [scaling\_plan\_role\_definition](#output\_scaling\_plan\_role\_definition) | AVD Scaling Plan Role Definition object output. |
+| <a name="output_scaling_plan_role_definition_id"></a> [scaling\_plan\_role\_definition\_id](#output\_scaling\_plan\_role\_definition\_id) | AVD Scaling Plan Role Definition ID. |
+| <a name="output_scaling_plan_role_definition_name"></a> [scaling\_plan\_role\_definition\_name](#output\_scaling\_plan\_role\_definition\_name) | AVD Scaling Plan Role Definition name. |
+| <a name="output_workspace"></a> [workspace](#output\_workspace) | AVD Workspace object output. |
+| <a name="output_workspace_id"></a> [workspace\_id](#output\_workspace\_id) | AVD Workspace ID. |
+| <a name="output_workspace_name"></a> [workspace\_name](#output\_workspace\_name) | AVD Workspace name. |
 <!-- END_TF_DOCS -->
