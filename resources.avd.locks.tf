@@ -27,7 +27,7 @@ resource "azurerm_management_lock" "azurerm_virtual_desktop_host_pool_level_lock
 # AZURE VIRTUAL DESKTOP Workspace - Default (required). 
 #------------------------------------------------------------
 resource "azurerm_management_lock" "azurerm_virtual_desktop_app_group_level_lock" {
-  for_each   = toset(var.enable_resource_locks ? local.aad_group_list : null)
+  for_each   = toset(var.enable_resource_locks ? local.aad_group_list : [])
   name       = "${local.avd_app_group_name}-${var.lock_level}-lock${format("%02d", "${index(local.aad_group_list, each.value) + 1}")}"
   scope      = azurerm_virtual_desktop_application_group.app_group[each.value].id
   lock_level = var.lock_level

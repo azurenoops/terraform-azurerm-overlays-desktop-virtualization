@@ -64,10 +64,10 @@ module "mod_virtual_machine" {
   #source_image_id = var.avd_shared_image != null ? azurerm_shared_image.image.id : each.value.source_image_id
 
   # Custom Image
-  custom_image = each.value.custom_image == null ? each.value.custom_image : null
+  custom_image = each.value.custom_image != null ? each.value.custom_image : null
 
   # Custom Image Plan
-  custom_image_plan = each.value.custom_image == null ? each.value.custom_image.plan : null
+  custom_image_plan = each.value.custom_image != null && each.value.custom_image.plan != null ? each.value.custom_image.plan : null
 
   # Virtual Machine Private IP Address
   private_ip_address_allocation_type = each.value.private_ip_address_allocation_type # Static or Dynamic
